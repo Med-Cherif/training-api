@@ -111,6 +111,14 @@ ul {
   font-size: 16px;
 }
 
+.todo-item.todo-item-completed {
+  background-color: #bbb;
+}
+
+.todo-item.todo-item-completed h2 {
+  text-decoration: line-through;
+}
+
 .todo-item .todo-actions {
   display: flex;
   align-items: center;

@@ -3,7 +3,7 @@ import { Todo } from "./TodoList";
 
 const TodoItem = ({ task, completed }: Todo) => {
   return (
-    <li className="todo-item">
+    <li className={`todo-item ${completed ? "todo-item-completed" : ""}`}>
       <h2>{task}</h2>
       <div className="todo-actions">
         {completed ? (
