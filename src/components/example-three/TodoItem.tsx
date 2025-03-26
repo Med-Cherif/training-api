@@ -1,10 +1,13 @@
-import React from "react";
-import { Todo } from "./TodoList";
+import { Todo } from "./requests";
 
-const TodoItem = ({ task, completed }: Todo) => {
+interface TodoItem extends Todo {
+  setSelectedId: React.Dispatch<React.SetStateAction<string | null>>;
+}
+
+const TodoItem = ({ task, completed, id, setSelectedId }: TodoItem) => {
   return (
     <li className={`todo-item ${completed ? "todo-item-completed" : ""}`}>
-      <h2>{task}</h2>
+      <h2 onClick={() => setSelectedId(id)}>{task}</h2>
       <div className="todo-actions">
         {completed ? (
           <></>

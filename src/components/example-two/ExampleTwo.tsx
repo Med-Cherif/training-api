@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { User } from "../../App";
 
 const ExampleTwo = () => {
@@ -8,6 +8,11 @@ const ExampleTwo = () => {
       const response = await fetch(
         "https://jsonplaceholder.typicode.com/users"
       );
+
+      if (!response.ok) {
+        throw new Error("");
+      }
+
       const data = await response.json();
 
       return data;

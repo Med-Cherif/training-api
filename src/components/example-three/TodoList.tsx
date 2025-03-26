@@ -1,31 +1,54 @@
-import React from "react";
 import TodoItem from "./TodoItem";
-
-export interface Todo {
-  id: string;
-  task: string;
-  completed: boolean;
-}
-
-const todos: Todo[] = [
-  { id: "1", task: "Walk the dog", completed: false },
-  { id: "2", task: "Read a book", completed: false },
-  { id: "3", task: "Reply to emails", completed: true },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getTodos, Todo } from "./requests";
+import SelectedTodo from "./SelectedTodo";
+import { useState } from "react";
 
 const TodoList = () => {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const [status, setStatus] = useState("all");
+
+  // React Query Send Request Whenever key changes
+  const query = useQuery({
+    placeholderData: [],
+    queryKey: ["todos", "list", status],
+    queryFn: () => getTodos(),
+  });
+
+  const isLoading = query.isLoading || query.isFetching;
+  const error = query.error;
+  const todos = query?.data || [];
+
   const isListEmpty = todos.length === 0;
 
+  // if (isLoading) {
+  //   return <p>Loading ...</p>;
+  // }
+
+  // if (error) {
+  //   return <p>Something went wrong</p>;
+  // }
+
   return (
-    <ul className="todo-list">
-      {isListEmpty ? (
-        <p>List is empty</p>
-      ) : (
-        todos.map((todo) => {
-          return <TodoItem key={todo.id} {...todo} />;
-        })
-      )}
-    </ul>
+    <div>
+      {/* <button onClick={() => setStatus("all")}>All</button>
+      <button onClick={() => setStatus("completed")}>Completed</button>
+      <button onClick={() => setStatus("uncompleted")}>Uncompleted</button> */}
+      <ul className="todo-list">
+        {isListEmpty ? (
+          <p>List is empty</p>
+        ) : (
+          todos.map((todo: Todo) => {
+            return (
+              <TodoItem key={todo.id} setSelectedId={setSelectedId} {...todo} />
+            );
+          })
+        )}
+      </ul>
+
+      <SelectedTodo id={selectedId} />
+    </div>
   );
 };
 

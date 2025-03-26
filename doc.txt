@@ -1,0 +1,5 @@
+To update the cache there are 2 ways
+
+1- Refetch Data After Mutation
+
+2- Update Cache Manually
