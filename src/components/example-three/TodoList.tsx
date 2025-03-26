@@ -2,7 +2,7 @@ import TodoItem from "./TodoItem";
 import { useQuery } from "@tanstack/react-query";
 import { getTodos, Todo } from "./requests";
 import SelectedTodo from "./SelectedTodo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const TodoList = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -16,19 +16,19 @@ const TodoList = () => {
     queryFn: () => getTodos(),
   });
 
-  const isLoading = query.isLoading || query.isFetching;
+  const isLoading = query.isLoading;
   const error = query.error;
   const todos = query?.data || [];
 
   const isListEmpty = todos.length === 0;
 
-  // if (isLoading) {
-  //   return <p>Loading ...</p>;
-  // }
+  if (isLoading) {
+    return <p>Loading ...</p>;
+  }
 
-  // if (error) {
-  //   return <p>Something went wrong</p>;
-  // }
+  if (error) {
+    return <p>Something went wrong</p>;
+  }
 
   return (
     <div>

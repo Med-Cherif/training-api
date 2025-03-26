@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addNewTodo } from "./requests";
+import { addNewTodo, Todo } from "./requests";
 
 const AddTodo = () => {
   const [task, setTask] = useState("");
@@ -12,35 +12,42 @@ const AddTodo = () => {
     mutationFn: (variables: any) => addNewTodo(variables),
 
     // it fires before request sent
+    // we use it in **Optimistic Updates** in general
     onMutate(variables) {},
+
     // if success
     onSuccess(data, variables, context) {
-      queryClient.invalidateQueries({
-        queryKey: ["todos", "list"],
-      });
+      // queryClient.invalidateQueries({
+      //   queryKey: ["todos", "list"],
+      // });
 
-      console.log("Success From Mutation");
+      queryClient.setQueriesData(
+        {
+          queryKey: ["todos", "list"],
+        },
+        (current) => {
+          return [...(current as Todo[]), data];
+        }
+      );
+
+      // console.log("Success From Mutation");
     },
 
     // if error
     onError(error, variables, context) {
       console.log("Error From Mutation");
     },
-
-    // if error or success
-    onSettled(data, error, variables, context) {},
   });
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
+    // await mutation.mutateAsync({}, {})
+
     mutation.mutate(
       {
         task,
         completed: false,
       },
       {
-        onSettled(data, error, variables, context) {
-          console.log("Success or Error");
-        },
         onSuccess(data, variables, context) {
           setTask("");
         },

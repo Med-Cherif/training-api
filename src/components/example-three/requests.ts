@@ -26,3 +26,13 @@ export const addNewTodo = async (data: any) => {
   const response = await httpRequest.post("/todos", data);
   return response.data.data;
 };
+
+export const editTodo = async (id: string, data: any) => {
+  const response = await httpRequest.patch(`/todos/${id}`, data);
+  return response.data.data;
+};
+
+export const deleteTodo = async (id: string) => {
+  const response = await httpRequest.delete(`/todos/${id}`);
+  return response.data.data;
+};
